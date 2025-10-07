@@ -23,14 +23,14 @@ class AdminProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'image' => 'nullable|string',
         ]);
 
-        Product::create($request->all());
+        Product::create($validated);
 
         return redirect()->route('admin.products.index')->with('success', 'Product added successfully.');
     }
@@ -42,14 +42,14 @@ class AdminProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'image' => 'nullable|string',
         ]);
 
-        $product->update($request->all());
+        $product->update($validated);
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }

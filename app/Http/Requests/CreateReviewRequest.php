@@ -27,4 +27,17 @@ class CreateReviewRequest extends FormRequest
             'comment'    => 'nullable|string|max:1000',
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $existingReview = \App\Models\Review::where('user_id', auth()->id())
+                ->where('product_id', $this->product_id)
+                ->exists();
+
+            if ($existingReview) {
+                $validator->errors()->add('product_id', 'You have already reviewed this product.');
+            }
+        });
+    }
 }
